@@ -38,9 +38,18 @@ namespace BugTracker
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddAuthorization(options => {
+                options.AddPolicy("AdminOnly",
+                    builder => builder.RequireRole("Admin"));
+                options.AddPolicy("Project Manager",
+                    builder => builder.RequireRole( "Project Manager"));
+                options.AddPolicy("Member",
+                    builder => builder.RequireRole("Member"));
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
