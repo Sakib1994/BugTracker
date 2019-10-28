@@ -16,7 +16,6 @@ namespace BugTracker.Controllers
         /// 
         /// Injecting Role Manager
         /// 
-        /// 
         public RolesController(RoleManager<IdentityRole> roleManager)
         {
             this.roleManager = roleManager;

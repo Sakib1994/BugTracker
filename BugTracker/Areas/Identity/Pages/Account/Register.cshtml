@@ -42,4 +42,15 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $(function () {
+            $("#Name","#StartDate","#Deadline").bind("change keyup",
+                function () {
+                    if ($("#Name").val() != ""&&$("#StartDate").val() != ""&&$("#Deadline").val())
+                        $(this).closest("form").find(":submit").removeAttr("disabled");
+                    else
+                        $(this).closest("form").find(":submit").attr("disabled", "disabled");
+                });
+        });
+    </script>
 }

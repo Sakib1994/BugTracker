@@ -49,7 +49,7 @@ namespace BugTracker.Controllers
         // GET: Bugs/Create
         public IActionResult Create()
         {
-            ViewData["MemberId"] = new SelectList(_context.Members, "Id", "Id");
+            ViewData["MemberId"] = new SelectList(_context.Members, "Id", "Name");
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
             return View();
         }

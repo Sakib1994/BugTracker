@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control is-invalid" required/>
+                <input asp-for="Name" class="form-control is-invalid" required />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -23,22 +23,24 @@
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control is-invalid" required/>
+                <input asp-for="StartDate" class="form-control is-invalid" required />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Deadline" class="control-label"></label>
-                <input asp-for="Deadline" class="form-control is-invalid" required/>
+                <input asp-for="Deadline" class="form-control is-invalid" required />
                 <span asp-validation-for="Deadline" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Progress" class="control-label"></label>
-                <input type="range" value="0" asp-for="Progress" min="0" max="100" class="form-control custom-range" />
+                <label asp-for="Progress" class="control-label"></label>:
+                <output name="ageOutputName" id="progressOutputId">0</output>
+                <input type="range" value="0" asp-for="Progress" min="0" max="100" class="form-control custom-range" onchange="progressOutputId.value = Progress.value" />
+                
                 <span asp-validation-for="Progress" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary" disabled/>
             </div>
         </form>
     </div>
@@ -47,7 +49,17 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(function () {
+            $("#Name").bind("change keyup",
+                function () {
+                    if ($("#Name").val() != "")
+                        $(this).closest("form").find(":submit").removeAttr("disabled");
+                    else
+                        $(this).closest("form").find(":submit").attr("disabled", "disabled");
+                });
+        });
+    </script>
 }
