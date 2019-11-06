@@ -38,6 +38,19 @@ namespace BugTracker
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
+            //// Use SQL Database if in Azure, otherwise, use Local Db
+            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production") { 
+            //    services.AddDbContext<ApplicationDbContext>(options =>
+            //            options.UseSqlServer(Configuration.GetConnectionString("MyDbConnection")));
+            //}
+            //else { 
+            //    services.AddDbContext<ApplicationDbContext>(options =>
+            //            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));}
+
+            //// Automatically perform database migration
+            ////services.BuildServiceProvider().GetService<ApplicationDbContext>().Database.Migrate();
+
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -68,7 +81,10 @@ namespace BugTracker
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
+            }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
